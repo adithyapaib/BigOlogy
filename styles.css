@@ -1,0 +1,397 @@
+/**
+ * BigOlogy - Styles
+ * 
+ * Matches LeetCode's native design system for seamless integration
+ * Supports both light and dark themes automatically
+ * 
+ * @author Adithya
+ * @see https://adithyapaib.com
+ */
+
+/* Main container */
+#leetcode-complexity-display {
+  margin: 16px 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 10px;
+  animation: slideIn 0.3s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  max-width: 100%;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.complexity-analysis-container {
+  background: var(--fill-3, #ffffff);
+  border: 1px solid var(--border-divider-3, #e5e7eb);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.complexity-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: none;
+  border-bottom: 1px solid var(--border-divider-3, #e5e7eb);
+}
+
+.complexity-icon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.complexity-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #262626);
+  letter-spacing: 0;
+}
+
+.complexity-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.complexity-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: var(--fill-2, #f7f8fa);
+  border-radius: 8px;
+  border: 1px solid var(--border-divider-3, #e5e7eb);
+  transition: all 0.2s ease;
+  flex: 1;
+  gap: 10px;
+}
+
+.complexity-item:hover {
+  background: var(--fill-3, #f0f1f3);
+  border-color: var(--border-divider-2, #d4d6d9);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.complexity-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+  text-align: center;
+  order: 2;
+}
+
+.complexity-value {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  padding: 8px 16px;
+  background: var(--fill-1, #eff1f3);
+  border-radius: 6px;
+  color: var(--text-brand, #ffa116);
+  letter-spacing: 0.3px;
+  text-align: center;
+  order: 1;
+  width: max-content;
+}
+
+/* Complexity level color coding */
+.complexity-value.excellent {
+  background: rgba(76, 197, 117, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(76, 197, 117, 0.3);
+}
+
+.complexity-value.good {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.complexity-value.fair {
+  background: rgba(234, 179, 8, 0.1);
+  color: #ca8a04;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.complexity-value.poor {
+  background: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.complexity-value.bad {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.complexity-footer {
+  text-align: center;
+  padding: 12px 20px;
+  background: var(--fill-2, #f7f8fa);
+  border-top: 1px solid var(--border-divider-3, #e5e7eb);
+}
+
+.powered-by {
+  font-size: 12px;
+  color: var(--text-tertiary, #9ca3af);
+  font-weight: 400;
+}
+
+.powered-by a {
+  color: var(--text-brand, #ffa116);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.powered-by a:hover {
+  color: var(--text-brand-hover, #ff9100);
+  text-decoration: underline;
+}
+
+/* Loading state */
+.complexity-analysis-container.loading .complexity-header {
+  background: var(--fill-2, #000000);
+  color: #fff;
+}
+
+.complexity-analysis-container.loading .complexity-title {
+  color: var(--text-primary, #262626);
+}
+
+.complexity-analysis-container.loading .complexity-icon {
+  color: var(--text-brand, #ffa116);
+}
+
+.complexity-analysis-container.loading .complexity-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  padding: 20px;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-divider-3, #e5e7eb);
+  border-top: 3px solid var(--text-brand, #4cc575);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.complexity-analysis-container.error {
+  border-color: var(--border-danger, #ef4444);
+}
+
+.complexity-analysis-container.error .complexity-header {
+  background: var(--fill-error, #fef2f2);
+  border-bottom-color: var(--border-danger, #ef4444);
+}
+
+.complexity-analysis-container.error .complexity-title {
+  color: var(--text-danger, #dc2626);
+}
+
+.complexity-analysis-container.error .complexity-icon {
+  color: var(--text-danger, #dc2626);
+}
+
+.error-message {
+  text-align: center;
+  padding: 12px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-danger, #ef4444);
+}
+
+/* Dark mode adjustments for LeetCode */
+.dark .complexity-analysis-container {
+  background: var(--dark-fill-3, #282828);
+  border-color: var(--dark-border-divider-3, #3a3a3a);
+}
+
+.dark .complexity-header {
+  background: var(--dark-fill-2, #1a1a1a);
+  border-bottom-color: var(--dark-border-divider-3, #3a3a3a);
+}
+
+.dark .complexity-title {
+  color: var(--dark-text-primary, #eff1f6);
+}
+
+.dark .complexity-item {
+  background: var(--dark-fill-2, #1a1a1a);
+  border-color: var(--dark-border-divider-3, #3a3a3a);
+}
+
+.dark .complexity-item:hover {
+  background: var(--dark-fill-3, #262626);
+  border-color: var(--dark-border-divider-2, #4a4a4a);
+}
+
+.dark .complexity-label {
+  color: var(--dark-text-secondary, #9ca3af);
+}
+
+.dark .complexity-value {
+  width: max-content;
+  background: var(--dark-fill-1, #0a0a0a);
+  color: var(--dark-text-brand, #4cc575);
+}
+
+/* Dark mode complexity level colors */
+.dark .complexity-value.excellent {
+  background: rgba(76, 197, 117, 0.15);
+  color: #4cc575;
+  border: 1px solid rgba(76, 197, 117, 0.4);
+}
+
+.dark .complexity-value.good {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.dark .complexity-value.fair {
+  background: rgba(234, 179, 8, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.dark .complexity-value.poor {
+  background: rgba(249, 115, 22, 0.15);
+  color: #fb923c;
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.dark .complexity-value.bad {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.dark .complexity-footer {
+  background: var(--dark-fill-2, #1a1a1a);
+  border-top-color: var(--dark-border-divider-3, #3a3a3a);
+}
+
+
+
+.dark .powered-by {
+  color: var(--dark-text-tertiary, #6b7280);
+}
+
+.dark .powered-by a {
+  color: var(--dark-text-brand, #ffa116);
+}
+
+.dark .powered-by a:hover {
+  color: var(--dark-text-brand-hover, #ff9100);
+}
+
+.dark .loading-spinner {
+  border-color: var(--dark-border-divider-3, #3a3a3a);
+  border-top-color: var(--dark-text-brand, #ffa116);
+}
+
+.dark .complexity-analysis-container.loading .complexity-title {
+  color: var(--dark-text-primary, #eff1f6);
+}
+
+.dark .complexity-analysis-container.loading .complexity-icon {
+  color: var(--dark-text-brand, #ffa116);
+}
+
+.dark .complexity-analysis-container.error {
+  border-color: var(--dark-border-danger, #dc2626);
+}
+
+.dark .complexity-analysis-container.error .complexity-header {
+  background: var(--dark-fill-error, #3a1a1a);
+  border-bottom-color: var(--dark-border-danger, #dc2626);
+}
+
+.dark .complexity-analysis-container.error .complexity-title {
+  color: var(--dark-text-danger, #f87171);
+}
+
+.dark .complexity-analysis-container.error .complexity-icon {
+  color: var(--dark-text-danger, #f87171);
+}
+
+.dark .error-message {
+  color: var(--dark-text-danger, #f87171);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #leetcode-complexity-display {
+    margin: 12px 0;
+  }
+  
+  .complexity-header {
+    padding: 12px 16px;
+  }
+  
+  .complexity-title {
+    font-size: 14px;
+  }
+  
+  .complexity-content {
+    padding: 16px;
+    gap: 12px;
+    flex-direction: column;
+  }
+  
+  .complexity-item {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  
+  .complexity-label {
+    font-size: 12px;
+  }
+  
+  .complexity-value {
+    font-size: 16px;
+  }
+  
+  .complexity-footer {
+    padding: 10px 16px;
+  }
+}
+
+/* Integration with LeetCode's existing styles */
+[data-e2e-locator="submission-result"] #leetcode-complexity-display,
+.submission-panel #leetcode-complexity-display {
+  margin-top: 0;
+  margin-bottom: 16px;
+}

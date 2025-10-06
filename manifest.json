@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "BigOlogy",
+  "version": "1.0.0",
+  "description": "Analyze time and space complexity of LeetCode solutions using AI (BigOlogy).",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/*",
+    "https://text.pollinations.ai/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://leetcode.com/contest/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon10px.png",
+    "48": "icons/image50.png",
+    "128": "icons/image100px.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon10px.png",
+      "48": "icons/image50.png",
+      "128": "icons/image100px.png"
+    }
+  }
+}

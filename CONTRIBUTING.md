@@ -24,7 +24,7 @@ Feature suggestions are welcome! Please:
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/adithyapaib/BigOlogy.git
+   git clone https://github.com/adithyapaib/BigOlogy
    ```
 
 2. **Create a feature branch**

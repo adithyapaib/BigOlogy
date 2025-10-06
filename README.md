@@ -31,7 +31,7 @@ BigOlogy seamlessly integrates with LeetCode's interface to provide instant algo
 
 1. **Download the Extension**
    ```
-   Clone or download this repository to your local machine
+   https://github.com/adithyapaib/BigOlogy
    ```
 
 2. **Open Chrome Extensions**
@@ -116,7 +116,7 @@ BigOlogy/
 
 ### Browser Compatibility
 
-- ✅ Google Chrome (v88+)
+- ✅ Google Chrome (v88+) - Tested
 - ✅ Microsoft Edge (Chromium-based)
 - ✅ Brave Browser
 - ✅ Any Chromium-based browser

@@ -247,7 +247,15 @@ async function analyzeComplexity(code, language) {
     if (response.success) {
       displayComplexity(response.timeComplexity, response.spaceComplexity);
     } else {
-      showErrorState(response.error || 'Failed to analyze complexity');
+      // If background returned structured error info, present more actionable messages
+      if (response.status && String(response.status).startsWith('5')) {
+        // Server-side error (e.g., 502)
+        showErrorState(`Analysis service temporarily unavailable (server ${response.status}). Please try again in a few moments.`);
+      } else if (response.error) {
+        showErrorState(response.error);
+      } else {
+        showErrorState('Failed to analyze complexity');
+      }
     }
   } catch (error) {
     console.error('Error analyzing complexity:', error);

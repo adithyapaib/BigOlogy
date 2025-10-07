@@ -18,11 +18,18 @@ console.log('BigOlogy - Background Script Loaded');
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'analyzeComplexity') {
     analyzeCodeComplexity(request.code, request.language)
-      .then(result => sendResponse(result))
-      .catch(error => sendResponse({ 
-        success: false, 
-        error: error.message 
-      }));
+      .then(result => {
+        // If the function returned a structured error object, forward it as-is
+        sendResponse(result);
+      })
+      .catch(error => {
+        // Unexpected exception - send structured response
+        console.error('Unexpected error in message handler:', error);
+        sendResponse({
+          success: false,
+          error: error.message || String(error)
+        });
+      });
     return true; // Keep message channel open for async response
   }
 });
@@ -58,21 +65,54 @@ Remember: Provide ONLY the two lines with Time Complexity and Space Complexity. 
     const encodedPrompt = encodeURIComponent(prompt);
     const apiUrl = `https://text.pollinations.ai/${encodedPrompt}`;
     
-    console.log('Making request to API...');
-    
-    const response = await fetch(apiUrl, {
+    console.log('Making request to API with retries...');
+
+    // Helper: fetch with retries for transient 5xx errors
+    async function fetchWithRetries(url, options = {}, attempts = 3, backoffMs = 500) {
+      let lastError = null;
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const resp = await fetch(url, options);
+          // If server error (5xx), treat as transient and retry
+          if (resp.status >= 500 && resp.status < 600) {
+            const text = await resp.text().catch(() => '');
+            lastError = new Error(`Server error ${resp.status}: ${text}`);
+            console.warn(`Attempt ${i + 1} failed with ${resp.status}. Retrying...`);
+            // exponential backoff
+            await new Promise(r => setTimeout(r, backoffMs * Math.pow(2, i)));
+            continue;
+          }
+          return resp;
+        } catch (err) {
+          // Network error, also retry
+          lastError = err;
+          console.warn(`Attempt ${i + 1} network error:`, err.message || err);
+          await new Promise(r => setTimeout(r, backoffMs * Math.pow(2, i)));
+        }
+      }
+      throw lastError;
+    }
+
+    const response = await fetchWithRetries(apiUrl, {
       method: 'GET',
       headers: {
         'Accept': 'text/plain'
       }
-    });
+    }, 3, 600);
 
     console.log('Response status:', response.status);
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('API error response:', errorText);
-      throw new Error(`API returned ${response.status}`);
+      // Capture response body where possible for diagnostics
+      const errorText = await response.text().catch(() => '');
+      console.error('API error response after retries:', response.status, errorText);
+      // Return a structured error so content script can show actionable message
+      return {
+        success: false,
+        error: `API returned ${response.status}`,
+        status: response.status,
+        body: errorText
+      };
     }
 
     const responseText = await response.text();

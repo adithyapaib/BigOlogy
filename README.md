@@ -211,6 +211,19 @@ copies of the Software.
 
 ---
 
+## ⚠️ API Reliability & Troubleshooting
+
+BigOlogy relies on a third-party AI endpoint (Pollinations) for complexity analysis. Occasionally, that service may return transient server errors (HTTP 5xx, e.g., 502 Bad Gateway). To help you when that happens:
+
+- If you see "Analysis service temporarily unavailable (server 5xx)", wait a minute and try submitting again.
+- Refresh the LeetCode page after updating or reloading the extension (F5).
+- If issues persist, check the browser console (F12) for diagnostic logs and open an issue on GitHub with the logs.
+- Consider running the analysis manually (local reasoning) until the service is restored.
+
+These tips are implemented in the extension: the background worker retries transient 5xx failures with exponential backoff and the UI shows a helpful message for server-side errors.
+
+---
+
 ## 🙏 Acknowledgments
 
 - **Pollinations AI** - For providing the free AI API

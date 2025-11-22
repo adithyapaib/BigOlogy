@@ -44,27 +44,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function analyzeCodeComplexity(code, language) {
   try {
     console.log('Starting complexity analysis for', language);
-    
+
     // Truncate code to avoid URL length issues
     const truncatedCode = code.substring(0, 1000);
-    
+
     // Create a more detailed and clear prompt
-    const prompt = `You are a Big O complexity analyzer. Analyze the following ${language} code and provide ONLY the time and space complexity in this exact format:
-
-Time Complexity: O(?)
-Space Complexity: O(?)
-
-Code to analyze:
-${truncatedCode}
-
-Remember: Provide ONLY the two lines with Time Complexity and Space Complexity. Use standard Big O notation like O(1), O(n), O(log n), O(n^2), O(2^n), etc.`;
+    const prompt = `You are a Big O complexity analyzer. Analyze the following ${language} code and provide the time and space complexity in JSON format.
     
+    Return ONLY a JSON object with this exact structure:
+    {
+      "timeComplexity": "O(?)",
+      "spaceComplexity": "O(?)",
+      "reasoning": "Brief explanation (max 1 sentence) of why this complexity was determined.",
+      "suggestion": "One short tip to improve efficiency, or 'Optimal' if it's already best."
+    }
+    
+    Code to analyze:
+    ${truncatedCode}
+    
+    Remember: Return ONLY the JSON object. Use standard Big O notation like O(1), O(n), O(log n), O(n^2), etc.`;
+
     console.log('Prompt:', prompt.substring(0, 150) + '...');
-    
+
     // Encode the prompt for URL
     const encodedPrompt = encodeURIComponent(prompt);
     const apiUrl = `https://text.pollinations.ai/${encodedPrompt}`;
-    
+
     console.log('Making request to API with retries...');
 
     // Helper: fetch with retries for transient 5xx errors
@@ -117,7 +122,7 @@ Remember: Provide ONLY the two lines with Time Complexity and Space Complexity. 
 
     const responseText = await response.text();
     console.log('Full API response:', responseText);
-    
+
     // Parse the complexity from the API response
     const complexityData = parseComplexityFromText(responseText);
 
@@ -126,7 +131,9 @@ Remember: Provide ONLY the two lines with Time Complexity and Space Complexity. 
     return {
       success: true,
       timeComplexity: complexityData.timeComplexity,
-      spaceComplexity: complexityData.spaceComplexity
+      spaceComplexity: complexityData.spaceComplexity,
+      reasoning: complexityData.reasoning || "Analysis provided by BigOlogy AI",
+      suggestion: complexityData.suggestion || "Consider optimizing nested loops if possible."
     };
 
   } catch (error) {
@@ -149,10 +156,10 @@ Remember: Provide ONLY the two lines with Time Complexity and Space Complexity. 
 function parseComplexityFromText(text) {
   try {
     console.log('Parsing full text:', text);
-    
+
     // Clean up the text
     const cleanText = text.trim();
-    
+
     // Try to parse as JSON first
     const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
@@ -212,7 +219,7 @@ function parseComplexityFromText(text) {
         spaceComplexity: oNotations[1].trim()
       };
     }
-    
+
     // Priority 5: if we find at least one O(...), use it for both
     if (oNotations && oNotations.length >= 1) {
       console.log('Matched Pattern 5 (Single O() notation):', oNotations[0]);
@@ -242,8 +249,8 @@ function parseComplexityFromText(text) {
  */
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-  console.log('BigOlogy installed successfully!');
+    console.log('BigOlogy installed successfully!');
   } else if (details.reason === 'update') {
-  console.log('BigOlogy updated to version', chrome.runtime.getManifest().version);
+    console.log('BigOlogy updated to version', chrome.runtime.getManifest().version);
   }
 });

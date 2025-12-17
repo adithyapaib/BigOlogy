@@ -2,7 +2,7 @@
 
 A professional Chrome Extension that automatically analyzes and displays the time and space complexity of your LeetCode solutions using AI-powered analysis.
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
 ![Chrome](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
@@ -24,16 +24,17 @@ BigOlogy seamlessly integrates with LeetCode's interface to provide instant algo
 - **🔒 Privacy-First** - No data collection, code analyzed only for complexity
 - **📱 Responsive** - Works perfectly on all screen sizes
 
-### 🆕 New in v2.0
+### 🆕 New in v2.0+
 - **📊 Code Quality Score (0-100)** - Get an overall score with breakdown for:
   - Readability
   - Efficiency  
   - Best Practices
-- **📈 Best/Average/Worst Case Analysis** - See all three complexity scenarios for both time and space
+- **⚡ Clean Complexity Display** - Single time and space complexity values for quick reference
 - **🧠 Detailed AI Explanations** - Understand *why* your code has that complexity:
   - Time analysis explains loops, recursion, and operations
   - Space analysis explains data structures and memory usage
 - **💡 Optimization Suggestions** - Actionable tips to improve your code
+- **🎯 Pattern Detection** - Identifies the algorithm pattern used (e.g., DFS, BFS, Two Pointers)
 
 ---
 
@@ -84,19 +85,19 @@ BigOlogy seamlessly integrates with LeetCode's interface to provide instant algo
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ ⚡ BigOlogy Analysis                                      [AI Powered v2.0] │
+│ ⚡ BigOlogy Analysis                                   [Claude Sonnet 4 ⚡] │
 ├──────────────────┬──────────────────────────┬───────────────────────────────┤
-│   CODE QUALITY   │   TIME COMPLEXITY        │   DETAILED EXPLANATIONS       │
+│   CODE QUALITY   │   COMPLEXITY             │   DETAILED EXPLANATIONS       │
 │                  │                          │                               │
-│      ┌───┐       │   Best     │ O(1)        │ ⏱️ Time Analysis              │
-│      │ 85│       │   Average  │ O(n)        │ The main loop iterates n      │
-│      └───┘       │   Worst    │ O(n)        │ times through the array...    │
-│      Score       ├──────────────────────────┤                               │
-│                  │   SPACE COMPLEXITY       │ 💾 Space Analysis             │
+│      ┌───┐       │   ⏱️ Time: O(n)          │ ⏱️ Time Analysis              │
+│      │ 85│       │                          │ The main loop iterates n      │
+│      └───┘       │   📦 Space: O(1)         │ times through the array...    │
+│      Score       │                          │                               │
+│                  │   Pattern: Two Pointers  │ 💾 Space Analysis             │
 │ Readability  90  │                          │ Uses O(1) auxiliary space     │
-│ Efficiency   80  │   Best     │ O(1)        │ with only pointer variables...│
-│ Best Prac.   85  │   Average  │ O(1)        │                               │
-│                  │   Worst    │ O(1)        │ 💡 Optimal solution achieved  │
+│ Efficiency   80  │                          │ with only pointer variables...│
+│ Best Prac.   85  │                          │                               │
+│                  │                          │ 💡 Optimal solution achieved  │
 └──────────────────┴──────────────────────────┴───────────────────────────────┘
 ```
 
@@ -263,9 +264,9 @@ These tips are implemented in the extension: the background worker retries trans
 ## 🚀 Roadmap
 
 ### Upcoming Features
-- [ ] Detailed complexity explanations
-- [ ] Best/Average/Worst case analysis
-- [ ] Optimization suggestions
+- [x] ~~Detailed complexity explanations~~ ✅ Added in v2.0
+- [x] ~~Best/Average/Worst case analysis~~ ✅ Added in v2.0 (simplified in v2.2)
+- [x] ~~Optimization suggestions~~ ✅ Added in v2.0
 - [ ] Historical complexity tracking
 - [ ] Comparison with optimal solutions
 - [ ] Export analysis reports

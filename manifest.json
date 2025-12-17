@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "BigOlogy",
-  "version": "2.1.0",
-  "description": "AI-powered LeetCode solution analyzer - Get time/space complexity (best/avg/worst cases), code quality scores, and detailed explanations. Powered by Claude Sonnet 4.",
+  "version": "2.2.0",
+  "description": "AI-powered LeetCode solution analyzer - Get time/space complexity, code quality scores, and detailed explanations. Powered by Claude Sonnet 4.",
   "permissions": [
     "activeTab",
     "storage",

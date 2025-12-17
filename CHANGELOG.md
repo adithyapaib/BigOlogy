@@ -5,6 +5,26 @@ All notable changes to BigOlogy will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-12-17
+
+### Changed
+- **Simplified Complexity Display** - Now shows single time and space complexity values instead of Best/Average/Worst breakdown
+- Cleaner, more streamlined UI for complexity cards with larger, more prominent values
+- Improved Optimization Tip card layout with proper column structure
+- Fixed overflow issues for long complexity expressions like O(n * m)
+
+### Fixed
+- Complexity value overflow in small containers
+- Optimization Tip text getting cut off
+- Grid layout issues causing content to spill outside cards
+
+### Technical
+- Added `.bo-single-value` and `.bo-complexity-value` CSS classes
+- Added `min-width: 0` to flex/grid items for proper shrinking
+- Improved card padding and spacing for better text fit
+
+---
+
 ## [2.0.0] - 2025-12-16
 
 ### Added

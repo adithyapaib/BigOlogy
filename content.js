@@ -172,24 +172,36 @@ function getOrCreateContainer(type) {
 
 /**
  * Displays the complexity analysis results in the LeetCode UI
- * @param {string} timeComplexity - Time complexity in Big O notation
- * @param {string} spaceComplexity - Space complexity in Big O notation
- * @param {string} reasoning - Brief explanation of the analysis
- * @param {string} suggestion - Optimization tip
+ * @param {Object} response - Full response from background script
  */
-function displayComplexity(timeComplexity, spaceComplexity, reasoning, suggestion) {
+function displayComplexity(response) {
   const container = getOrCreateContainer('result');
   if (!container) return;
 
-  const timeData = classifyComplexity(timeComplexity);
-  const spaceData = classifyComplexity(spaceComplexity);
+  // Extract data from response
+  const timeComplexity = response.timeComplexity;
+  const spaceComplexity = response.spaceComplexity;
+  const detailedExplanation = response.detailedExplanation;
+  const codeQuality = response.codeQuality;
+  const suggestion = response.suggestion;
+  const pattern = response.pattern || 'General Algorithm';
 
-  // Calculate position for the graph (0-100%)
-  const getGraphPosition = (score) => {
-    return 100 - score;
+  // Get classification for worst case (primary indicator)
+  const timeData = classifyComplexity(timeComplexity.worst);
+  const spaceData = classifyComplexity(spaceComplexity.worst);
+
+  // Code quality score color
+  const getScoreColor = (score) => {
+    if (score >= 85) return 'var(--bo-color-excellent)';
+    if (score >= 70) return 'var(--bo-color-good)';
+    if (score >= 50) return 'var(--bo-color-fair)';
+    if (score >= 30) return 'var(--bo-color-poor)';
+    return 'var(--bo-color-bad)';
   };
 
-  const timePos = getGraphPosition(timeData.score);
+  const scoreColor = getScoreColor(codeQuality.score);
+  const circumference = 2 * Math.PI * 36;
+  const scoreOffset = circumference - (codeQuality.score / 100) * circumference;
 
   container.innerHTML = `
     <div class="complexity-row-container">
@@ -198,56 +210,105 @@ function displayComplexity(timeComplexity, spaceComplexity, reasoning, suggestio
         <div class="bo-title">
           <span>BigOlogy Analysis</span>
         </div>
-        <div class="bo-badge">AI Powered</div>
+        <div class="bo-badge">Claude Sonnet 4 ⚡</div>
       </div>
 
-      <!-- Main Content Row -->
-      <div class="bo-content-row">
+      <!-- Main Content - 2 Row Layout -->
+      <div class="bo-enhanced-content">
         
-        <!-- Time Metric -->
-        <div class="bo-metric-card">
-          <div class="bo-metric-header">
-            ${ICONS.clock}
-            <span>Time Complexity</span>
+        <!-- TOP ROW: Score + Complexity Cards -->
+        <div class="bo-top-section">
+          
+          <!-- Left: Code Quality Score -->
+          <div class="bo-quality-section">
+            <div class="bo-quality-circle">
+              <svg viewBox="0 0 80 80" class="bo-score-ring">
+                <circle cx="40" cy="40" r="36" fill="none" stroke="var(--bo-bg-secondary)" stroke-width="6"/>
+                <circle cx="40" cy="40" r="36" fill="none" stroke="${scoreColor}" stroke-width="6" 
+                  stroke-dasharray="${circumference}" stroke-dashoffset="${scoreOffset}"
+                  stroke-linecap="round" transform="rotate(-90 40 40)" class="bo-score-progress"/>
+              </svg>
+              <div class="bo-score-value">
+                <span class="bo-score-number">${codeQuality.score}</span>
+                <span class="bo-score-label">Score</span>
+              </div>
+            </div>
+            <div class="bo-quality-breakdown">
+              <div class="bo-quality-item">
+                <span class="bo-quality-name">Readability</span>
+                <div class="bo-quality-bar-container">
+                  <div class="bo-quality-bar" style="width: ${codeQuality.readability}%; background: ${getScoreColor(codeQuality.readability)}"></div>
+                </div>
+                <span class="bo-quality-value">${codeQuality.readability}</span>
+              </div>
+              <div class="bo-quality-item">
+                <span class="bo-quality-name">Efficiency</span>
+                <div class="bo-quality-bar-container">
+                  <div class="bo-quality-bar" style="width: ${codeQuality.efficiency}%; background: ${getScoreColor(codeQuality.efficiency)}"></div>
+                </div>
+                <span class="bo-quality-value">${codeQuality.efficiency}</span>
+              </div>
+              <div class="bo-quality-item">
+                <span class="bo-quality-name">Best Practices</span>
+                <div class="bo-quality-bar-container">
+                  <div class="bo-quality-bar" style="width: ${codeQuality.bestPractices}%; background: ${getScoreColor(codeQuality.bestPractices)}"></div>
+                </div>
+                <span class="bo-quality-value">${codeQuality.bestPractices}</span>
+              </div>
+            </div>
           </div>
-          <div class="bo-metric-body">
-            <span class="bo-value ${timeData.class}">${timeComplexity}</span>
-            <span class="bo-label">${timeData.name}</span>
+
+          <!-- Right: Complexity Cards Grid -->
+          <div class="bo-complexity-section">
+            <!-- Pattern Badge - spans full width -->
+            <div class="bo-pattern-card">
+              <span class="bo-pattern-label">Detected Pattern</span>
+              <span class="bo-pattern-value">${pattern}</span>
+            </div>
+
+            <!-- Time Complexity Card -->
+            <div class="bo-case-card bo-single-value">
+              <div class="bo-case-header">
+                ${ICONS.clock}
+                <span>Time Complexity</span>
+              </div>
+              <div class="bo-complexity-value ${timeData.class}">${timeComplexity.worst}</div>
+            </div>
+
+            <!-- Space Complexity Card -->
+            <div class="bo-case-card bo-single-value">
+              <div class="bo-case-header">
+                ${ICONS.cube}
+                <span>Space Complexity</span>
+              </div>
+              <div class="bo-complexity-value ${spaceData.class}">${spaceComplexity.worst}</div>
+            </div>
           </div>
+          
         </div>
 
-        <!-- Space Metric -->
-        <div class="bo-metric-card">
-          <div class="bo-metric-header">
-            ${ICONS.cube}
-            <span>Space Complexity</span>
-          </div>
-          <div class="bo-metric-body">
-            <span class="bo-value ${spaceData.class}">${spaceComplexity}</span>
-            <span class="bo-label">${spaceData.name}</span>
-          </div>
-        </div>
-
-        <!-- Visual Scale & Insight -->
-        <div class="bo-insight-card">
-          <div class="bo-scale-wrapper">
-            <div class="bo-scale-header">
-              <span>Complexity Scale</span>
-              <span class="bo-scale-value">${timeData.name}</span>
+        <!-- BOTTOM ROW: Explanation Cards -->
+        <div class="bo-bottom-section">
+          <div class="bo-explanation-card">
+            <div class="bo-explanation-header">
+              <span class="bo-explanation-icon">⏱️</span>
+              <span>Time Analysis</span>
             </div>
-            <div class="bo-scale-track">
-              <div class="bo-scale-bar"></div>
-              <div class="bo-scale-marker" style="left: ${timePos}%"></div>
-            </div>
-            <div class="bo-scale-labels">
-              <span>O(1)</span>
-              <span>O(n)</span>
-              <span>O(n²)</span>
-            </div>
+            <p class="bo-explanation-text">${detailedExplanation.timeAnalysis}</p>
           </div>
-          <div class="bo-reasoning">
-            <span class="bo-tip-icon">💡</span>
-            <span class="bo-reasoning-text">${reasoning || suggestion || 'Analysis complete.'}</span>
+          <div class="bo-explanation-card">
+            <div class="bo-explanation-header">
+              <span class="bo-explanation-icon">💾</span>
+              <span>Space Analysis</span>
+            </div>
+            <p class="bo-explanation-text">${detailedExplanation.spaceAnalysis}</p>
+          </div>
+          <div class="bo-suggestion-card">
+            <div class="bo-explanation-header">
+              <span class="bo-explanation-icon">💡</span>
+              <span>Optimization Tip</span>
+            </div>
+            <p class="bo-explanation-text">${suggestion}</p>
           </div>
         </div>
 
@@ -259,6 +320,94 @@ function displayComplexity(timeComplexity, spaceComplexity, reasoning, suggestio
 }
 
 /**
+ * Generates an SVG graph for time complexity
+ * @param {string} complexity - The complexity string (e.g., "O(n)")
+ * @returns {string} SVG HTML string
+ */
+function generateGraphSVG(complexity) {
+  const rank = getComplexityRank(complexity);
+
+  // Coordinate system: 100x100
+  // X axis: Input size (n) from 0 to 10
+  // Y axis: Operations from 0 to 10 (scaled)
+
+  // Define curves as points "x,y x,y ..."
+  const generatePath = (fn) => {
+    let points = [];
+    for (let x = 0; x <= 10; x += 0.5) {
+      // Y is inverted for SVG (0 is top)
+      // Scale: fit 0-10 domain into 0-80 range (leaving padding)
+      let yVal = fn(x);
+      // Clamp y
+      if (yVal > 10) yVal = 10;
+
+      const svgX = (x / 10) * 100;
+      const svgY = 100 - (yVal / 10) * 100;
+      points.push(`${svgX},${svgY}`);
+    }
+    return points.join(' ');
+  };
+
+  // Complexity functions (scaled for visualization)
+  const curves = [
+    { rank: 0, fn: x => 0.5, name: 'O(1)' },                     // Constant
+    { rank: 1, fn: x => Math.log2(x + 1) * 1.5, name: 'O(log n)' }, // Logarithmic
+    { rank: 2, fn: x => x, name: 'O(n)' },                       // Linear
+    { rank: 3, fn: x => x * Math.log2(x + 1) * 0.5, name: 'O(n log n)' }, // Linearithmic
+    { rank: 4, fn: x => Math.pow(x, 2) * 0.15, name: 'O(n^2)' },    // Quadratic
+    { rank: 5, fn: x => Math.pow(2, x) * 0.05, name: 'O(2^n)' }     // Exponential
+  ];
+
+  let pathsHTML = '';
+
+  curves.forEach((curve) => {
+    const isActive = curve.rank === rank;
+    const opacity = isActive ? 1 : 0.15;
+    const strokeWidth = isActive ? 3 : 1.5;
+    const color = isActive ? 'var(--bo-accent)' : 'var(--bo-text-secondary)';
+
+    // Generate simple path
+    const d = `M ${generatePath(curve.fn)}`;
+
+    pathsHTML += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-opacity="${opacity}" stroke-linecap="round" />`;
+
+    // Add label for active curve
+    if (isActive) {
+      // Position label roughly at the end of the curve
+      pathsHTML += `<text x="70" y="20" font-size="12" fill="var(--bo-text-primary)" font-weight="bold" text-anchor="middle">${complexity}</text>`;
+    }
+  });
+
+  return `
+    <svg viewBox="0 0 100 100" class="bo-complexity-graph">
+      <!-- Axes -->
+      <line x1="0" y1="100" x2="100" y2="100" stroke="var(--bo-border)" stroke-width="1" />
+      <line x1="0" y1="0" x2="0" y2="100" stroke="var(--bo-border)" stroke-width="1" />
+      
+      <!-- Curves -->
+      ${pathsHTML}
+    </svg>
+  `;
+}
+
+/**
+ * Normalizes complexity string to a rank 0-5
+ */
+function getComplexityRank(complexity) {
+  if (!complexity) return 2; // Default O(n)
+  const c = complexity.toLowerCase().replace(/\s+/g, '');
+
+  if (c.includes('1')) return 0;
+  if (c.includes('n!') || c.includes('2^n')) return 5;
+  if (c.includes('n^2') || c.includes('n*n')) return 4;
+  if (c.includes('nlogn') || c.includes('log') && c.includes('n')) return 3;
+  if (c.includes('log')) return 1;
+  if (c.includes('n')) return 2;
+
+  return 2; // Default
+}
+
+/**
  * Shows a loading spinner while analysis is in progress
  */
 function showLoadingState() {
@@ -266,15 +415,75 @@ function showLoadingState() {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="complexity-header">
-      <div class="header-left">
-        <span class="complexity-icon-wrapper spin">${ICONS.bolt}</span>
-        <span class="complexity-title">Analyzing Solution...</span>
+    <div class="complexity-row-container">
+      <!-- Header Section -->
+      <div class="bo-header">
+        <div class="bo-title">
+          <span class="bo-analyzing-icon">${ICONS.bolt}</span>
+          <span>Analyzing Solution...</span>
+        </div>
+        <div class="bo-badge bo-badge-loading">Processing</div>
       </div>
-    </div>
-    <div class="complexity-content loading-content">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">Crunching the numbers...</p>
+
+      <!-- Loading Content -->
+      <div class="bo-loading-content">
+        <div class="bo-loading-left">
+          <div class="bo-loading-score-ring">
+            <svg viewBox="0 0 80 80" class="bo-score-ring">
+              <circle cx="40" cy="40" r="36" fill="none" stroke="var(--bo-bg-secondary)" stroke-width="6"/>
+              <circle cx="40" cy="40" r="36" fill="none" stroke="var(--bo-accent)" stroke-width="6" 
+                stroke-dasharray="226" stroke-dashoffset="170"
+                stroke-linecap="round" transform="rotate(-90 40 40)" class="bo-loading-progress"/>
+            </svg>
+            <div class="bo-loading-icon">
+              ${ICONS.bolt}
+            </div>
+          </div>
+          <div class="bo-loading-bars">
+            <div class="bo-skeleton-bar"></div>
+            <div class="bo-skeleton-bar"></div>
+            <div class="bo-skeleton-bar"></div>
+          </div>
+        </div>
+        
+        <div class="bo-loading-center">
+          <div class="bo-skeleton-card">
+            <div class="bo-skeleton-header"></div>
+            <div class="bo-skeleton-grid">
+              <div class="bo-skeleton-item"></div>
+              <div class="bo-skeleton-item"></div>
+              <div class="bo-skeleton-item"></div>
+            </div>
+          </div>
+          <div class="bo-skeleton-card">
+            <div class="bo-skeleton-header"></div>
+            <div class="bo-skeleton-grid">
+              <div class="bo-skeleton-item"></div>
+              <div class="bo-skeleton-item"></div>
+              <div class="bo-skeleton-item"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bo-loading-right">
+          <div class="bo-skeleton-text-block">
+            <div class="bo-skeleton-line long"></div>
+            <div class="bo-skeleton-line medium"></div>
+            <div class="bo-skeleton-line short"></div>
+          </div>
+          <div class="bo-skeleton-text-block">
+            <div class="bo-skeleton-line long"></div>
+            <div class="bo-skeleton-line medium"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bo-loading-footer">
+        <div class="bo-loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="bo-loading-text">AI is analyzing your code complexity...</span>
+      </div>
     </div>
   `;
 }
@@ -335,7 +544,7 @@ async function analyzeComplexity(code, language) {
     }
 
     if (response.success) {
-      displayComplexity(response.timeComplexity, response.spaceComplexity, response.reasoning, response.suggestion);
+      displayComplexity(response);
     } else {
       // If background returned structured error info, present more actionable messages
       if (response.status && String(response.status).startsWith('5')) {

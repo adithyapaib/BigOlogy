@@ -2,7 +2,7 @@
 
 A professional Chrome Extension that automatically analyzes and displays the time and space complexity of your LeetCode solutions using AI-powered analysis.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
 ![Chrome](https://img.shields.io/badge/Chrome-Extension-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
@@ -16,12 +16,24 @@ BigOlogy seamlessly integrates with LeetCode's interface to provide instant algo
 
 ## ✨ Features
 
+### Core Features
 - **🤖 AI-Powered Analysis** - Leverages advanced AI to accurately determine algorithm complexity
 - **⚡ Instant Results** - Get complexity analysis immediately after code submission
 - **🎨 Native UI** - Seamlessly matches LeetCode's design system (light & dark mode)
 - **🌐 Multi-Language** - Supports all programming languages available on LeetCode
 - **🔒 Privacy-First** - No data collection, code analyzed only for complexity
 - **📱 Responsive** - Works perfectly on all screen sizes
+
+### 🆕 New in v2.0
+- **📊 Code Quality Score (0-100)** - Get an overall score with breakdown for:
+  - Readability
+  - Efficiency  
+  - Best Practices
+- **📈 Best/Average/Worst Case Analysis** - See all three complexity scenarios for both time and space
+- **🧠 Detailed AI Explanations** - Understand *why* your code has that complexity:
+  - Time analysis explains loops, recursion, and operations
+  - Space analysis explains data structures and memory usage
+- **💡 Optimization Suggestions** - Actionable tips to improve your code
 
 ---
 
@@ -68,22 +80,30 @@ BigOlogy seamlessly integrates with LeetCode's interface to provide instant algo
    - Once submission results appear, the complexity analysis card will display automatically
    - See **Time Complexity** and **Space Complexity** in Big O notation
 
-### Example Output
+### Example Output (v2.0)
 
 ```
-┌──────────────────────────────────┐
-│ ⚡ Complexity Analysis           │
-├──────────────────────────────────┤
-│ Time Complexity:        O(n)     │
-│ Space Complexity:       O(1)     │
-├──────────────────────────────────┤
-│ Made with ❤️ by Adithya          │
-└──────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ⚡ BigOlogy Analysis                                      [AI Powered v2.0] │
+├──────────────────┬──────────────────────────┬───────────────────────────────┤
+│   CODE QUALITY   │   TIME COMPLEXITY        │   DETAILED EXPLANATIONS       │
+│                  │                          │                               │
+│      ┌───┐       │   Best     │ O(1)        │ ⏱️ Time Analysis              │
+│      │ 85│       │   Average  │ O(n)        │ The main loop iterates n      │
+│      └───┘       │   Worst    │ O(n)        │ times through the array...    │
+│      Score       ├──────────────────────────┤                               │
+│                  │   SPACE COMPLEXITY       │ 💾 Space Analysis             │
+│ Readability  90  │                          │ Uses O(1) auxiliary space     │
+│ Efficiency   80  │   Best     │ O(1)        │ with only pointer variables...│
+│ Best Prac.   85  │   Average  │ O(1)        │                               │
+│                  │   Worst    │ O(1)        │ 💡 Optimal solution achieved  │
+└──────────────────┴──────────────────────────┴───────────────────────────────┘
 ```
+
 ### Screenshot
 ![BigOlogy Screenshot](./screenshot.png "BigOlogy in action on LeetCode")
 
-_Screenshot: BigOlogy displaying time and space complexity after submitting a solution on LeetCode._
+_Screenshot: BigOlogy displaying enhanced complexity analysis with code quality score after submitting a solution on LeetCode._
 ---
 
 ## 🏗️ Project Structure

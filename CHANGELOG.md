@@ -5,6 +5,34 @@ All notable changes to BigOlogy will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-12-16
+
+### Added
+- **Code Quality Score (0-100)**: AI rates your code on readability, efficiency, and best practices
+- **Best/Average/Worst Case Analysis**: Get all three complexity scenarios for both time and space
+- **Detailed AI Explanations**: Understand *why* your code has that complexity
+  - Time analysis: Explains loops, recursion, and operations affecting time
+  - Space analysis: Explains data structures, recursion stack, and memory usage
+- **Visual Score Breakdown**: Progress bars for readability, efficiency, and best practices
+- **Circular Progress Indicator**: Beautiful animated score display
+- **Enhanced UI Design**: Modern grid layout with hover effects and animations
+
+### Changed
+- Completely redesigned analysis display with 3-column layout
+- Updated AI prompt to request comprehensive analysis data
+- Improved response parsing with fallback support for legacy format
+- Updated popup to showcase new v2.0 features
+- Enhanced dark mode support for new UI components
+
+### Technical
+- Extended response structure to include nested complexity objects
+- Added code quality metrics parsing (score, readability, efficiency, bestPractices)
+- Implemented animated SVG circular progress ring
+- Added CSS grid layout for responsive enhanced content
+- Improved error handling and default value fallbacks
+
+---
+
 ## [1.0.0] - 2025-10-06
 
 ### Added

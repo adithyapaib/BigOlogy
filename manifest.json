@@ -1,15 +1,19 @@
 {
   "manifest_version": 3,
   "name": "BigOlogy",
-  "version": "1.0.0",
-  "description": "Analyze time and space complexity of LeetCode solutions using AI (BigOlogy).",
+  "version": "2.1.0",
+  "description": "AI-powered LeetCode solution analyzer - Get time/space complexity (best/avg/worst cases), code quality scores, and detailed explanations. Powered by Claude Sonnet 4.",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "offscreen"
   ],
   "host_permissions": [
     "https://leetcode.com/*",
-    "https://text.pollinations.ai/*"
+    "https://text.pollinations.ai/*",
+    "https://js.puter.com/*",
+    "https://api.puter.com/*",
+    "https://puter.com/*"
   ],
   "content_scripts": [
     {
@@ -17,8 +21,12 @@
         "https://leetcode.com/problems/*",
         "https://leetcode.com/contest/*"
       ],
-      "js": ["content.js"],
-      "css": ["styles.css"],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
       "run_at": "document_end"
     }
   ],

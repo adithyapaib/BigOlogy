@@ -179,6 +179,34 @@
     .footer a:hover {
       text-decoration: underline;
     }
+
+    .features {
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .features h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .feature-icon {
+      font-size: 14px;
+    }
   </style>
 </head>
 
@@ -194,7 +222,7 @@
       </div>
       <div class="title-group">
         <h1>BigOlogy</h1>
-        <span class="version">v2.0.0</span>
+        <span class="version">v2.0.0 - Enhanced AI</span>
       </div>
     </div>
 
@@ -205,6 +233,23 @@
           <span class="status-dot"></span>
           Active
         </span>
+      </div>
+    </div>
+
+    <!-- New Features Section -->
+    <div class="features">
+      <h3>✨ What's New in v2.0</h3>
+      <div class="feature-item">
+        <span class="feature-icon">📊</span>
+        <span>Code Quality Score (0-100)</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">📈</span>
+        <span>Best / Average / Worst Cases</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🧠</span>
+        <span>Detailed AI Explanations</span>
       </div>
     </div>
 
@@ -220,7 +265,7 @@
       </div>
       <div class="step">
         <span class="step-number">3</span>
-        <span>View the AI-powered complexity analysis in the results panel</span>
+        <span>View the enhanced AI analysis in the results panel</span>
       </div>
     </div>
 
